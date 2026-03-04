@@ -15,6 +15,20 @@ object GeminiConfig {
     const val VIDEO_FRAME_INTERVAL_MS = 1000L
     const val VIDEO_JPEG_QUALITY = 50
 
+    const val DEFAULT_VOICE = "Puck"
+
+    val voice: String
+        get() = SettingsManager.geminiVoice
+
+    val AVAILABLE_VOICES = listOf(
+        "Puck", "Charon", "Kore", "Fenrir", "Aoede",
+        "Leda", "Orus", "Zephyr", "Clio", "Calliope",
+        "Autonoe", "Enceladus", "Iapetus", "Umbriel", "Algieba",
+        "Despina", "Erinome", "Gacrux", "Laomedeia", "Pulcherrima",
+        "Sulafat", "Vindemiatrix", "Zubenelgenubi", "Schedar", "Alkes",
+        "Sadatoni", "Almach", "Rasalgethi", "Alnilam", "Electra"
+    )
+
     val systemInstruction: String
         get() = SettingsManager.geminiSystemPrompt
 

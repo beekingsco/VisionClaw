@@ -14,10 +14,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -32,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.meta.wearable.dat.externalsampleapps.cameraaccess.gemini.GeminiConfig
 import com.meta.wearable.dat.externalsampleapps.cameraaccess.settings.SettingsManager
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,6 +46,8 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
 ) {
     var geminiAPIKey by remember { mutableStateOf(SettingsManager.geminiAPIKey) }
+    var geminiVoice by remember { mutableStateOf(SettingsManager.geminiVoice) }
+    var voiceDropdownExpanded by remember { mutableStateOf(false) }
     var systemPrompt by remember { mutableStateOf(SettingsManager.geminiSystemPrompt) }
     var openClawHost by remember { mutableStateOf(SettingsManager.openClawHost) }
     var openClawPort by remember { mutableStateOf(SettingsManager.openClawPort.toString()) }
@@ -51,6 +58,7 @@ fun SettingsScreen(
 
     fun save() {
         SettingsManager.geminiAPIKey = geminiAPIKey.trim()
+        SettingsManager.geminiVoice = geminiVoice
         SettingsManager.geminiSystemPrompt = systemPrompt.trim()
         SettingsManager.openClawHost = openClawHost.trim()
         openClawPort.trim().toIntOrNull()?.let { SettingsManager.openClawPort = it }
@@ -61,6 +69,7 @@ fun SettingsScreen(
 
     fun reload() {
         geminiAPIKey = SettingsManager.geminiAPIKey
+        geminiVoice = SettingsManager.geminiVoice
         systemPrompt = SettingsManager.geminiSystemPrompt
         openClawHost = SettingsManager.openClawHost
         openClawPort = SettingsManager.openClawPort.toString()
@@ -98,6 +107,34 @@ fun SettingsScreen(
                 label = "API Key",
                 placeholder = "Enter Gemini API key",
             )
+
+            ExposedDropdownMenuBox(
+                expanded = voiceDropdownExpanded,
+                onExpandedChange = { voiceDropdownExpanded = it },
+            ) {
+                OutlinedTextField(
+                    value = geminiVoice,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Voice") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = voiceDropdownExpanded) },
+                    modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                )
+                ExposedDropdownMenu(
+                    expanded = voiceDropdownExpanded,
+                    onDismissRequest = { voiceDropdownExpanded = false },
+                ) {
+                    GeminiConfig.AVAILABLE_VOICES.forEach { voice ->
+                        DropdownMenuItem(
+                            text = { Text(voice) },
+                            onClick = {
+                                geminiVoice = voice
+                                voiceDropdownExpanded = false
+                            },
+                        )
+                    }
+                }
+            }
 
             SectionHeader("System Prompt")
             OutlinedTextField(

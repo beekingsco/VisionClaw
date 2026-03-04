@@ -21,6 +21,10 @@ object SettingsManager {
         get() = prefs.getString("geminiSystemPrompt", null) ?: DEFAULT_SYSTEM_PROMPT
         set(value) = prefs.edit().putString("geminiSystemPrompt", value).apply()
 
+    var geminiVoice: String
+        get() = prefs.getString("geminiVoice", null) ?: "Puck"
+        set(value) = prefs.edit().putString("geminiVoice", value).apply()
+
     var openClawHost: String
         get() = prefs.getString("openClawHost", null) ?: Secrets.openClawHost
         set(value) = prefs.edit().putString("openClawHost", value).apply()

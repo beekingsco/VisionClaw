@@ -42,6 +42,18 @@ enum GeminiConfig {
     For messages, confirm recipient and content before delegating unless clearly urgent.
     """
 
+  // Voice
+  static let defaultVoice = "Puck"
+  static var voice: String { SettingsManager.shared.geminiVoice }
+  static let availableVoices = [
+    "Puck", "Charon", "Kore", "Fenrir", "Aoede",
+    "Leda", "Orus", "Zephyr", "Clio", "Calliope",
+    "Autonoe", "Enceladus", "Iapetus", "Umbriel", "Algieba",
+    "Despina", "Erinome", "Gacrux", "Laomedeia", "Pulcherrima",
+    "Sulafat", "Vindemiatrix", "Zubenelgenubi", "Schedar", "Alkes",
+    "Sadatoni", "Almach", "Rasalgethi", "Alnilam", "Electra"
+  ]
+
   // User-configurable values (Settings screen overrides, falling back to Secrets.swift)
   static var apiKey: String { SettingsManager.shared.geminiAPIKey }
   static var openClawHost: String { SettingsManager.shared.openClawHost }

@@ -199,6 +199,13 @@ class GeminiLiveService {
                 put("model", GeminiConfig.MODEL)
                 put("generationConfig", JSONObject().apply {
                     put("responseModalities", JSONArray().put("AUDIO"))
+                    put("speechConfig", JSONObject().apply {
+                        put("voiceConfig", JSONObject().apply {
+                            put("prebuiltVoiceConfig", JSONObject().apply {
+                                put("voiceName", GeminiConfig.voice)
+                            })
+                        })
+                    })
                     put("thinkingConfig", JSONObject().apply {
                         put("thinkingBudget", 0)
                     })

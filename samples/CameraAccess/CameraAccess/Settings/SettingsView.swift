@@ -4,6 +4,7 @@ struct SettingsView: View {
   @Environment(\.dismiss) private var dismiss
   private let settings = SettingsManager.shared
 
+  @State private var geminiVoice: String = GeminiConfig.defaultVoice
   @State private var geminiAPIKey: String = ""
   @State private var openClawHost: String = ""
   @State private var openClawPort: String = ""
@@ -25,6 +26,12 @@ struct SettingsView: View {
               .autocapitalization(.none)
               .disableAutocorrection(true)
               .font(.system(.body, design: .monospaced))
+          }
+
+          Picker("Voice", selection: $geminiVoice) {
+            ForEach(GeminiConfig.availableVoices, id: \.self) { voice in
+              Text(voice).tag(voice)
+            }
           }
         }
 
@@ -129,6 +136,7 @@ struct SettingsView: View {
 
   private func loadCurrentValues() {
     geminiAPIKey = settings.geminiAPIKey
+    geminiVoice = settings.geminiVoice
     geminiSystemPrompt = settings.geminiSystemPrompt
     openClawHost = settings.openClawHost
     openClawPort = String(settings.openClawPort)
@@ -139,6 +147,7 @@ struct SettingsView: View {
 
   private func save() {
     settings.geminiAPIKey = geminiAPIKey.trimmingCharacters(in: .whitespacesAndNewlines)
+    settings.geminiVoice = geminiVoice
     settings.geminiSystemPrompt = geminiSystemPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
     settings.openClawHost = openClawHost.trimmingCharacters(in: .whitespacesAndNewlines)
     if let port = Int(openClawPort.trimmingCharacters(in: .whitespacesAndNewlines)) {
